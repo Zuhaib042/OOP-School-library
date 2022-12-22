@@ -12,7 +12,7 @@ class Person < Nameable
     @parent_permission = parent_permission
     @rentals = []
   end
-  
+
   def add_rental(rental)
     @rentals << rental
   end
