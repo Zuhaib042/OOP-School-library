@@ -81,7 +81,7 @@ https://github.com/microverseinc/curriculum-ruby.git
 To run the project, execute the following command:
 
 Run following command from the root folder in the terminal or in the command prompt.
-`ruby person.rb`
+`ruby main.rb`
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
