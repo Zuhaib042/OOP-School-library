@@ -73,7 +73,7 @@ class App
     name = gets.chomp
     print 'Has parent permission? [Y/N]: '
     permission = gets.chomp
-    each_student = Student.new(age, name, permission)
+    each_student = Student.new(name, age, permission)
     @persons.push(each_student)
     puts "Student '#{name}' created successfully"
   end
