@@ -1,3 +1,4 @@
+require 'pry'
 require_relative 'book'
 require_relative 'teacher'
 require_relative 'student'
@@ -74,6 +75,7 @@ class App
     print 'Has parent permission? [Y/N]: '
     permission = gets.chomp
     each_student = Student.new(name, age, permission)
+    binding.pry
     @persons.push(each_student)
     puts "Student '#{name}' created successfully"
   end
