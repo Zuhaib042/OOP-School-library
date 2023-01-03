@@ -43,6 +43,10 @@ class App
     books_json   = []
     persons_json = []
     rentals_json = []
+
+    @books.each do |book|
+      books_json.push({Name: book.title, Author: book.author})
+    end
     
     @persons.each do |person|
      if (person.type == "Student")
@@ -54,7 +58,7 @@ class App
 
     File.open("data_files/books.json", "w") do |file| 
       @books.each do |book|
-        file.write JSON.generate([book.title, book.author]) 
+        file.write JSON.generate(books_json) 
       end
       
     end
