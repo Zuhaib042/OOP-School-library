@@ -2,6 +2,7 @@ require_relative 'book'
 require_relative 'teacher'
 require_relative 'student'
 require_relative 'rental'
+require 'json'
 
 class App
   def initialize
@@ -30,10 +31,42 @@ class App
       input = gets.chomp.to_i
       case input
       when 1..6 then options(input)
-      when 7 then puts 'Thank you for using our app.'
+      when 7 
+        save_data
+        puts 'Thank you for using our app.'
       end
       break if input == 7
     end
+  end
+  
+  def save_data
+    books_json   = []
+    persons_json = []
+    rentals_json = []
+    
+    @persons.each do |person|
+     if (person.type == "Student")
+      persons_json.push({json_class: person.type, name: person.name, age: person.age, parent_permission: person.parent_permission})
+     else
+      persons_json.push({json_class: person.type, name: person.name, age: person.age, parent_permission: person.parent_permission, specialization: person.specialization})
+     end
+    end
+
+    File.open("data_files/books.json", "w") do |file| 
+      @books.each do |book|
+        file.write JSON.generate([book.title, book.author]) 
+      end
+      
+    end
+
+    File.open("data_files/people.json", "w") do |file| 
+      file.write JSON.generate(persons_json) 
+    end
+
+    File.open("data_files/rentals.json", "w") do |file| 
+      file.write JSON.generate(rentals_json) 
+    end
+
   end
 
   def options(input)
@@ -73,6 +106,11 @@ class App
     name = gets.chomp
     print 'Has parent permission? [Y/N]: '
     permission = gets.chomp
+    if %w[Y y YES yes].include?(permission)
+      permission = true
+    elsif %w[N n NO no].include?(permission)
+      permission = false
+    end
     each_student = Student.new(age, name, permission)
     @persons.push(each_student)
     puts "Student '#{name}' created successfully"
