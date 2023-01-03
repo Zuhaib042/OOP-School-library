@@ -6,13 +6,14 @@ require 'json'
 
 class App
   def initialize
-    @persons = []
+    @persons = [] 
     @books = []
     @rentals = []
   end
 
   def run
     puts 'Welcome to School Library App!'
+    read_data
     menu
   end
 
@@ -38,6 +39,18 @@ class App
       break if input == 7
     end
   end
+
+  def read_data
+    books = File.read("data_files/books.json")
+
+    if !books.empty?
+      books_array = JSON.parse(books)
+      books_array.each do |book|
+        @books.push(Book.new(book["Title"], book["Author"]))
+      end
+    end
+    
+  end
   
   def save_data
     books_json   = []
@@ -45,7 +58,7 @@ class App
     rentals_json = []
 
     @books.each do |book|
-      books_json.push({Name: book.title, Author: book.author})
+      books_json.push({Title: book.title, Author: book.author})
     end
     
     @persons.each do |person|
@@ -61,10 +74,7 @@ class App
     end
 
     File.open("data_files/books.json", "w") do |file| 
-      @books.each do |book|
-        file.write JSON.generate(books_json) 
-      end
-      
+      file.write JSON.generate(books_json) 
     end
 
     File.open("data_files/people.json", "w") do |file| 
