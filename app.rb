@@ -56,6 +56,10 @@ class App
      end
     end
 
+    @rentals.each do |rental|
+      rentals_json.push({Date: rental.date, Person: rental.person.name, Book: rental.book.title})
+    end
+
     File.open("data_files/books.json", "w") do |file| 
       @books.each do |book|
         file.write JSON.generate(books_json) 
