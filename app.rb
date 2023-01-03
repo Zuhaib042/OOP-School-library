@@ -75,7 +75,8 @@ class App
       selecting_people = @persons.select do |person|
         person.name == rental['Person']
       end
-      @rentals.push(Rental.new(rental['Date'], selecting_people, selecting_book))
+
+      @rentals.push(Rental.new(rental['Date'], selecting_people.pop, selecting_book.pop))
     end
   end
 
