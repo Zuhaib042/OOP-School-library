@@ -41,6 +41,9 @@ class App
   end
 
   def read_data
+    File.new('data_files/books.json', 'w') unless File.exist?('data_files/books.json')
+    File.new('data_files/people.json', 'w') unless File.exist?('data_files/people.json')
+    File.new('data_files/rentals.json', 'w') unless File.exist?('data_files/rentals.json')
     books = File.read('data_files/books.json')
     people = File.read('data_files/people.json')
     rentals = File.read('data_files/rentals.json')
@@ -65,7 +68,7 @@ class App
       end
     end
 
-    return if rentals.empty?
+    return if rentals.empty? || people.empty? || books.empty?
 
     rentals_array = JSON.parse(rentals)
     rentals_array.each do |rental|
