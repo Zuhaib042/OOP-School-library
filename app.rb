@@ -42,11 +42,25 @@ class App
 
   def read_data
     books = File.read("data_files/books.json")
+    people = File.read("data_files/people.json")
 
     if !books.empty?
       books_array = JSON.parse(books)
       books_array.each do |book|
         @books.push(Book.new(book["Title"], book["Author"]))
+      end
+    end
+
+    if !people.empty?
+      people_array = JSON.parse(people)
+      people_array.each do |person|
+        if person["type"] == "Student"
+          @persons.push(Student.new(person["age"], person["name"], person["parent_permission"]))
+        end
+
+        if person["type"] == "Teacher"
+          @persons.push(Teacher.new(person["age"], person["specialization"], person["name"]))
+        end
       end
     end
     
@@ -63,9 +77,9 @@ class App
     
     @persons.each do |person|
      if (person.type == "Student")
-      persons_json.push({json_class: person.type, name: person.name, age: person.age, parent_permission: person.parent_permission})
+      persons_json.push({type: person.type, name: person.name, age: person.age, parent_permission: person.parent_permission})
      else
-      persons_json.push({json_class: person.type, name: person.name, age: person.age, parent_permission: person.parent_permission, specialization: person.specialization})
+      persons_json.push({type: person.type, name: person.name, age: person.age, parent_permission: person.parent_permission, specialization: person.specialization})
      end
     end
 

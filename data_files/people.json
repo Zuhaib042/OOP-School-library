@@ -1,1 +1,1 @@
-[]
+[{"type":"Student","name":"lili","age":24,"parent_permission":true},{"type":"Student","name":"amine","age":21,"parent_permission":true},{"type":"Teacher","name":"lili","age":55,"parent_permission":true,"specialization":"scc"}]
