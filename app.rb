@@ -6,7 +6,7 @@ require 'json'
 
 class App
   def initialize
-    @persons = [] 
+    @persons = []
     @books = []
     @rentals = []
   end
@@ -32,7 +32,7 @@ class App
       input = gets.chomp.to_i
       case input
       when 1..6 then options(input)
-      when 7 
+      when 7
         save_data
         puts 'Thank you for using our app.'
       end
@@ -41,64 +41,72 @@ class App
   end
 
   def read_data
-    books = File.read("data_files/books.json")
-    people = File.read("data_files/people.json")
+    books = File.read('data_files/books.json')
+    people = File.read('data_files/people.json')
+    rentals = File.read('data_files/rentals.json')
 
-    if !books.empty?
+    unless books.empty?
       books_array = JSON.parse(books)
       books_array.each do |book|
-        @books.push(Book.new(book["Title"], book["Author"]))
+        @books.push(Book.new(book['Title'], book['Author']))
       end
     end
 
-    if !people.empty?
+    unless people.empty?
       people_array = JSON.parse(people)
       people_array.each do |person|
-        if person["type"] == "Student"
-          @persons.push(Student.new(person["age"], person["name"], person["parent_permission"]))
+        if person['type'] == 'Student'
+          @persons.push(Student.new(person['age'], person['name'], person['parent_permission']))
         end
 
-        if person["type"] == "Teacher"
-          @persons.push(Teacher.new(person["age"], person["specialization"], person["name"]))
+        if person['type'] == 'Teacher'
+          @persons.push(Teacher.new(person['age'], person['specialization'], person['name']))
         end
       end
     end
-    
+
+    return if rentals.empty?
+
+    rentals_array = JSON.parse(rentals)
+    rentals_array.each do |rental|
+      selecting_book = @books.select do |book|
+        book.title == rental['Book']
+      end
+      selecting_people = @persons.select do |person|
+        person.name == rental['Person']
+      end
+      @rentals.push(Rental.new(rental['Date'], selecting_people, selecting_book))
+    end
   end
-  
+
   def save_data
-    books_json   = []
+    books_json = []
     persons_json = []
     rentals_json = []
 
     @books.each do |book|
-      books_json.push({Title: book.title, Author: book.author})
+      books_json.push({ Title: book.title, Author: book.author })
     end
-    
+
     @persons.each do |person|
-     if (person.type == "Student")
-      persons_json.push({type: person.type, name: person.name, age: person.age, parent_permission: person.parent_permission})
-     else
-      persons_json.push({type: person.type, name: person.name, age: person.age, parent_permission: person.parent_permission, specialization: person.specialization})
-     end
+      if person.type == 'Student'
+        persons_json.push({ type: person.type, name: person.name, age: person.age,
+                            parent_permission: person.parent_permission })
+      else
+        persons_json.push({ type: person.type, name: person.name, age: person.age,
+                            parent_permission: person.parent_permission, specialization: person.specialization })
+      end
     end
 
     @rentals.each do |rental|
-      rentals_json.push({Date: rental.date, Person: rental.person.name, Book: rental.book.title})
+      rentals_json.push({ Date: rental.date, Person: rental.person.name, Book: rental.book.title })
     end
 
-    File.open("data_files/books.json", "w") do |file| 
-      file.write JSON.generate(books_json) 
-    end
+    File.write('data_files/books.json', JSON.generate(books_json))
 
-    File.open("data_files/people.json", "w") do |file| 
-      file.write JSON.generate(persons_json) 
-    end
+    File.write('data_files/people.json', JSON.generate(persons_json))
 
-    File.open("data_files/rentals.json", "w") do |file| 
-      file.write JSON.generate(rentals_json) 
-    end
-
+    File.write('data_files/rentals.json', JSON.generate(rentals_json))
   end
 
   def options(input)
