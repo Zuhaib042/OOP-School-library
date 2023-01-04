@@ -9,10 +9,14 @@ class App
     @persons = []
     @books = []
     @rentals = []
+    @people_file = nil
+    @books_file = nil
+    @rentals_file = nil
   end
 
   def run
     puts 'Welcome to School Library App!'
+    load_all_files
     read_data
     read_rentals
     menu
@@ -43,22 +47,28 @@ class App
 
   # rubocop:disable Metrics/PerceivedComplexity
   # rubocop:disable Metrics/CyclomaticComplexity
-  def read_data
+
+  def load_all_files
     File.new('data_files/books.json', 'w') unless File.exist?('data_files/books.json')
     File.new('data_files/people.json', 'w') unless File.exist?('data_files/people.json')
-    books = File.read('data_files/books.json')
-    people = File.read('data_files/people.json')
+    File.new('data_files/rentals.json', 'w') unless File.exist?('data_files/rentals.json')
+    
+    @people_file = File.read('data_files/people.json')
+    @books_file = File.read('data_files/books.json')
+    @rentals_file = File.read('data_files/rentals.json')
+  end
 
-    unless books.empty?
-      books_array = JSON.parse(books)
+  def read_data
+    unless @books_file.empty?
+      books_array = JSON.parse(@books_file)
       books_array.each do |book|
         @books.push(Book.new(book['Title'], book['Author']))
       end
     end
 
-    return if people.empty?
+    return if @people_file.empty?
 
-    people_array = JSON.parse(people)
+    people_array = JSON.parse(@people_file)
     people_array.each do |person|
       if person['type'] == 'Student'
         @persons.push(Student.new(person['age'], person['name'], person['parent_permission']))
@@ -71,13 +81,10 @@ class App
   # rubocop:enable Metrics/PerceivedComplexity
 
   def read_rentals
-    File.new('data_files/rentals.json', 'w') unless File.exist?('data_files/rentals.json')
-    rentals = File.read('data_files/rentals.json')
-
-    if rentals.empty?
+    if @rentals_file.empty? || @people_file.empty? || @books_file.empty?
       puts 'rentals are empty'
     else
-      rentals_array = JSON.parse(rentals)
+      rentals_array = JSON.parse(@rentals_file)
       rentals_array.each do |rental|
         selecting_book = @books.select do |book|
           book.title == rental['Book']
@@ -86,7 +93,7 @@ class App
           person.name == rental['Person']
         end
 
-        @rentals.push(Rental.new(rental['Date'], selecting_people.pop, selecting_book.pop))
+        @rentals.push(Rental.new(rental['Date'], selecting_people[0], selecting_book[0]))
       end
     end
   end
