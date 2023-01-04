@@ -14,6 +14,7 @@ class App
   def run
     puts 'Welcome to School Library App!'
     read_data
+    read_rentals
     menu
   end
 
@@ -41,12 +42,8 @@ class App
   end
 
   def read_data
-    File.new('data_files/books.json', 'w') unless File.exist?('data_files/books.json')
-    File.new('data_files/people.json', 'w') unless File.exist?('data_files/people.json')
-    File.new('data_files/rentals.json', 'w') unless File.exist?('data_files/rentals.json')
     books = File.read('data_files/books.json')
     people = File.read('data_files/people.json')
-    rentals = File.read('data_files/rentals.json')
 
     unless books.empty?
       books_array = JSON.parse(books)
@@ -55,31 +52,36 @@ class App
       end
     end
 
-    unless people.empty?
-      people_array = JSON.parse(people)
-      people_array.each do |person|
-        if person['type'] == 'Student'
-          @persons.push(Student.new(person['age'], person['name'], person['parent_permission']))
-        end
+    return if people.empty?
 
-        if person['type'] == 'Teacher'
-          @persons.push(Teacher.new(person['age'], person['specialization'], person['name']))
-        end
+    people_array = JSON.parse(people)
+    people_array.each do |person|
+      if person['type'] == 'Student'
+        @persons.push(Student.new(person['age'], person['name'], person['parent_permission']))
+      else
+        @persons.push(Teacher.new(person['age'], person['specialization'], person['name']))
       end
     end
+  end
 
-    return if rentals.empty? || people.empty? || books.empty?
+  def read_rentals
+    File.new('data_files/rentals.json', 'w') unless File.exist?('data_files/rentals.json')
+    rentals = File.read('data_files/rentals.json')
 
-    rentals_array = JSON.parse(rentals)
-    rentals_array.each do |rental|
-      selecting_book = @books.select do |book|
-        book.title == rental['Book']
+    if rentals.empty?
+      puts 'rentals are empty'
+    else
+      rentals_array = JSON.parse(rentals)
+      rentals_array.each do |rental|
+        selecting_book = @books.select do |book|
+          book.title == rental['Book']
+        end
+        selecting_people = @persons.select do |person|
+          person.name == rental['Person']
+        end
+
+        @rentals.push(Rental.new(rental['Date'], selecting_people.pop, selecting_book.pop))
       end
-      selecting_people = @persons.select do |person|
-        person.name == rental['Person']
-      end
-
-      @rentals.push(Rental.new(rental['Date'], selecting_people.pop, selecting_book.pop))
     end
   end
 
