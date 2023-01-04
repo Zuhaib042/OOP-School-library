@@ -41,6 +41,8 @@ class App
     end
   end
 
+  # rubocop:disable Metrics/PerceivedComplexity
+  # rubocop:disable Metrics/CyclomaticComplexity
   def read_data
     File.new('data_files/books.json', 'w') unless File.exist?('data_files/books.json')
     File.new('data_files/people.json', 'w') unless File.exist?('data_files/people.json')
@@ -65,6 +67,8 @@ class App
       end
     end
   end
+  # rubocop:enable Metrics/CyclomaticComplexity
+  # rubocop:enable Metrics/PerceivedComplexity
 
   def read_rentals
     File.new('data_files/rentals.json', 'w') unless File.exist?('data_files/rentals.json')
