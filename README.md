@@ -89,11 +89,23 @@ Run following command from the root folder in the terminal or in the command pro
 
 ## 👥 Authors <a name="authors"></a>
 
-👤 **Author1**
+👤 **Zuhaib Amjad**
 
 - GitHub: [@Zuhaib042](https://github.com/Zuhaib042)
 - Twitter: [@Zuhaib042](https://twitter.com/Zuhaib042)
 - LinkedIn: [LinkedIn](https://www.linkedin.com/in/zuhaib-amjad-488914234/)
+
+👤 **Kolapo Precious Akinrinlola**
+
+- GitHub: [LIBERCOSOFT](https://github.com/LIBERCOSOFT)
+- Twitter: [@Gerfieldt](https://twitter.com/Gerfieldt)
+- LinkedIn: [Kolapo Akinrinlola](https://linkedin.com/in/kolapo-akinrinlola-072097110)
+
+👤 **Amine**
+
+- GitHub: [@ouasamine](https://github.com/ouasamine)
+- Twitter: [@ouass_amine](https://twitter.com/ouass_amine)
+- LinkedIn: [LinkedIn](https://www.linkedin.com/in/amine-ouassef-314686214/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
