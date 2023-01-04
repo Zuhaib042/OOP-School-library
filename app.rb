@@ -42,6 +42,8 @@ class App
   end
 
   def read_data
+    File.new('data_files/books.json', 'w') unless File.exist?('data_files/books.json')
+    File.new('data_files/people.json', 'w') unless File.exist?('data_files/people.json')
     books = File.read('data_files/books.json')
     people = File.read('data_files/people.json')
 
