@@ -7,8 +7,9 @@ describe Classroom do
       student = Student.new('Ahmad', 18, true)
       classroom = Classroom.new('Arts Class')
       expect(classroom).to be_instance_of Classroom
+
       classroom.add_student(student)
-      expect(classroom.students.pop).to be_instance_of Student
+      expect(classroom.students[0]).to be_instance_of Student
     end
   end
 end
